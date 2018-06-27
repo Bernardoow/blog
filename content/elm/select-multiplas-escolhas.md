@@ -1,8 +1,8 @@
-Title: Meld exibindo código na lingua japonesa-chinesa durante o merge.
-Date: 2017-12-24 18:00
+Title: Select multiplas-escolhas.
+Date: 2018-07-01 18:00
 Category: Outros
-Tags: Mercurial, Linux, SCM, Merge
-Slug: meld-merge-encoding
+Tags: ELM
+Slug: select-multiplas-escolhas
 Authors: Bernardo Gomes
 Status: draft
 
