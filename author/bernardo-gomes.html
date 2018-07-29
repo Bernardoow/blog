@@ -3,7 +3,8 @@
 <head>
         <meta charset="utf-8" />
         <title>Blog do Bernardoow - Bernardo Gomes</title>
-        <link rel="stylesheet" href="/blog/theme/css/main.css" />
+        <link rel="stylesheet" href="n/theme/css/main.css" />
+        <link href="n/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Blog do Bernardoow Atom Feed" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -12,45 +13,105 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="/blog/">Blog do Bernardoow </a></h1>
+                <h1><a href="n/">Blog do Bernardoow </a></h1>
                 <nav><ul>
-                    <li><a href="/blog/category/outros.html">Outros</a></li>
+                    <li><a href="n/category/outros.html">Outros</a></li>
+                    <li><a href="n/category/python.html">Python</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/blog/meld-merge-encoding.html">Meld exibindo código na lingua japonesa-chinesa durante o merge.</a></h1>
+                    <h1 class="entry-title"><a href="n/sqlachemy-primary-key-sysdate-oracle-problema.html">Problema com primary key datetime.</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-07-28T18:00:00-03:00">
+                Published: Sáb 28 julho 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="n/author/bernardo-gomes.html">Bernardo Gomes</a>
+        </address>
+<p>In <a href="n/category/python.html">Python</a>.</p>
+<p>tags: <a href="n/tag/sqlalchemy.html">SqlAlchemy</a> <a href="n/tag/sysdate.html">Sysdate</a> <a href="n/tag/oracle.html">Oracle</a> </p>
+</footer><!-- /.post-info --><p>Trabalhei em uma tarefa que possuía uma tabela legada que tinha como uma chave primária composta sendo um campo de string e o outro datetime.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">DateTime</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
+
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">BlogExemplo</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;blog_exemplo&#39;</span>
+    <span class="n">campo_um</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">campo_dois</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">DateTime</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">campo_tres</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Até esse momento nenhum problema. Possuímos um débito técnico no nosso servidor que a hora do máquina não é a mesma do banco de dados. Com isso, SEMPRE precisamos utilizar a função do banco de dados sysdate para obter a data do banco para depois atribui a uma coluna.</p>
+<p>Nesse momento, no primeiro teste que fiz para criar um novo registro no banco de dados.
+Criei um instance da classe como segue o exemplo e tentei salvar no banco de dados.</p>
+<div class="highlight"><pre><span></span><span class="n">exemplo</span> <span class="o">=</span> <span class="n">BlogExemplo</span><span class="p">()</span>
+<span class="n">exemplo</span><span class="o">.</span><span class="n">campo_um</span> <span class="o">=</span> <span class="s2">&quot;texto_1&quot;</span>
+<span class="n">exemplo</span><span class="o">.</span><span class="n">campo_dois</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">sysdate</span><span class="p">()</span>
+<span class="n">exemplo</span><span class="o">.</span><span class="n">campo_tres</span> <span class="o">=</span> <span class="s2">&quot;outro texto&quot;</span>
+<span class="n">db</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">exemplo</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+
+
+<p>A minha expectativa era que salvasse no banco de dados e que eu proseguiria com meu desenvolvimento, mas o que aconteceu foi um erro ser lançado com a informação que eu não tinha dados no chave primária campo_dois.</p>
+<p>Investiguei e percebi que o ORM faz uma checagem antes de valores e como o func.sysdate() somente é executado no DB, asim para o ORM eu não tinha adicionado um valor para o campo.</p>
+<p>Para resolver meu problema, eu segui a estratégia de criar uma função para obter data/hora e atribuir para a variável.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy.sql</span> <span class="kn">import</span> <span class="n">text</span>
+
+
+<span class="k">def</span> <span class="nf">obter_hora_servidor</span><span class="p">():</span>
+    <span class="n">stmt</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span><span class="s2">&quot;SELECT sysdate from DUAL;&quot;</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+
+<span class="n">exemplo</span> <span class="o">=</span> <span class="n">BlogExemplo</span><span class="p">()</span>
+<span class="n">exemplo</span><span class="o">.</span><span class="n">campo_um</span> <span class="o">=</span> <span class="s2">&quot;texto_1&quot;</span>
+<span class="n">exemplo</span><span class="o">.</span><span class="n">campo_dois</span> <span class="o">=</span> <span class="n">obter_hora_servidor</span><span class="p">()</span>
+<span class="n">exemplo</span><span class="o">.</span><span class="n">campo_tres</span> <span class="o">=</span> <span class="s2">&quot;outro texto&quot;</span>
+<span class="n">db</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">exemplo</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Assim conseguir resolver meu problema.</p>
+<p>Obs: Esse problema somente acontecia na hora de criar um novo objeto. Se fosse para atualizar um existente poderia utilizar a func.sysdate().</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="n/meld-merge-encoding.html" rel="bookmark"
+                           title="Permalink to Meld exibindo código na lingua japonesa-chinesa durante o merge.">Meld exibindo código na lingua japonesa-chinesa durante o merge.</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2017-12-24T18:00:00-02:00">
                 Published: Dom 24 dezembro 2017
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="/blog/author/bernardo-gomes.html">Bernardo Gomes</a>
+                By                         <a class="url fn" href="n/author/bernardo-gomes.html">Bernardo Gomes</a>
         </address>
-<p>In <a href="/blog/category/outros.html">Outros</a>.</p>
-<p>tags: <a href="/blog/tag/mercurial.html">Mercurial</a> <a href="/blog/tag/linux.html">Linux</a> <a href="/blog/tag/scm.html">SCM</a> <a href="/blog/tag/merge.html">Merge</a> </p>
-</footer><!-- /.post-info --><p>A minha equipe estava trabalhando em um projeto antigo e precisei fazer um merge. Uma situação relativamente simples de ser resolvida. Durante o merge foi aberto o programa Meld[1] e a comparação do texto não foi o que eu esperava pois o código comparado estava em uma lingua parecida com o japonês/chinês.</p>
-<p><img alt="alt &quot;meld exibindo comparações com outra lingua.&quot;" src="/blog/images/merge-unicode.png"></p>
-<p>Pesquisei a solução e descobri que o problema estava na codificação do software para merge. No projeto que estava trabalhando, a codificação era latin-1 e por padrão a codificação do Meld era utf-8.</p>
-<p>A solução utilizada foi primeiro checar o encoding suportado através do comando</p>
-<div class="highlight"><pre><span></span>$ gsettings get org.gnome.meld detect-encodings
-<span class="o">[</span><span class="s1">&#39;utf8&#39;</span><span class="o">]</span>
-</pre></div>
-
-
-<p>Assim confirmei que estava somente aceitando utf-8. Para suportar o latin-1 executei o seguinte comando:</p>
-<div class="highlight"><pre><span></span>gsettings set org.gnome.meld detect-encodings &quot;[&#39;utf8&#39;,&#39;latin1&#39;]&quot;
-</pre></div>
-
-
-<p>Com isso, conseguir realizar o merge.</p>
-<p>O caso apresentado é voltado para latin1. Se seu projeto for de outro encoding faça o mesmo processo alterando o latin1 para o encoding que utilizar.</p>
-<p>Fontes:</p>
-<p><a href="https://askubuntu.com/questions/839755/meld-shows-output-in-unreadable-alphabet-japanese-chinese">askubuntu.com</a></p>
-<p>[1] <a href="http://meldmerge.org/">Meld</a></p>                </article>
-            </aside><!-- /#featured -->
+<p>In <a href="n/category/outros.html">Outros</a>.</p>
+<p>tags: <a href="n/tag/mercurial.html">Mercurial</a> <a href="n/tag/linux.html">Linux</a> <a href="n/tag/scm.html">SCM</a> <a href="n/tag/merge.html">Merge</a> </p>
+</footer><!-- /.post-info -->                <p>A minha equipe estava trabalhando em um projeto antigo e precisei fazer um merge. Uma situação relativamente simples de ser resolvida. Durante o merge foi aberto o programa Meld[1] e a comparação do texto não foi o que eu esperava pois o código comparado estava em uma lingua parecida …</p>
+                <a class="readmore" href="n/meld-merge-encoding.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>links</h2>
@@ -64,6 +125,7 @@
                 <div class="social">
                         <h2>social</h2>
                         <ul>
+                            <li><a href="n/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="#">You can add links in your config file</a></li>
                             <li><a href="#">Another social link</a></li>

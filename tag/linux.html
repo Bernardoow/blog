@@ -3,7 +3,8 @@
 <head>
         <meta charset="utf-8" />
         <title>Blog do Bernardoow - Linux</title>
-        <link rel="stylesheet" href="/blog/theme/css/main.css" />
+        <link rel="stylesheet" href="n/theme/css/main.css" />
+        <link href="n/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Blog do Bernardoow Atom Feed" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -12,27 +13,28 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="/blog/">Blog do Bernardoow </a></h1>
+                <h1><a href="n/">Blog do Bernardoow </a></h1>
                 <nav><ul>
-                    <li><a href="/blog/category/outros.html">Outros</a></li>
+                    <li><a href="n/category/outros.html">Outros</a></li>
+                    <li><a href="n/category/python.html">Python</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/blog/meld-merge-encoding.html">Meld exibindo código na lingua japonesa-chinesa durante o merge.</a></h1>
+                    <h1 class="entry-title"><a href="n/meld-merge-encoding.html">Meld exibindo código na lingua japonesa-chinesa durante o merge.</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2017-12-24T18:00:00-02:00">
                 Published: Dom 24 dezembro 2017
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="/blog/author/bernardo-gomes.html">Bernardo Gomes</a>
+                By                         <a class="url fn" href="n/author/bernardo-gomes.html">Bernardo Gomes</a>
         </address>
-<p>In <a href="/blog/category/outros.html">Outros</a>.</p>
-<p>tags: <a href="/blog/tag/mercurial.html">Mercurial</a> <a href="/blog/tag/linux.html">Linux</a> <a href="/blog/tag/scm.html">SCM</a> <a href="/blog/tag/merge.html">Merge</a> </p>
+<p>In <a href="n/category/outros.html">Outros</a>.</p>
+<p>tags: <a href="n/tag/mercurial.html">Mercurial</a> <a href="n/tag/linux.html">Linux</a> <a href="n/tag/scm.html">SCM</a> <a href="n/tag/merge.html">Merge</a> </p>
 </footer><!-- /.post-info --><p>A minha equipe estava trabalhando em um projeto antigo e precisei fazer um merge. Uma situação relativamente simples de ser resolvida. Durante o merge foi aberto o programa Meld[1] e a comparação do texto não foi o que eu esperava pois o código comparado estava em uma lingua parecida com o japonês/chinês.</p>
-<p><img alt="alt &quot;meld exibindo comparações com outra lingua.&quot;" src="/blog/images/merge-unicode.png"></p>
+<p><img alt="alt &quot;meld exibindo comparações com outra lingua.&quot;" src="n/images/merge-unicode.png"></p>
 <p>Pesquisei a solução e descobri que o problema estava na codificação do software para merge. No projeto que estava trabalhando, a codificação era latin-1 e por padrão a codificação do Meld era utf-8.</p>
 <p>A solução utilizada foi primeiro checar o encoding suportado através do comando</p>
 <div class="highlight"><pre><span></span>$ gsettings get org.gnome.meld detect-encodings
@@ -64,6 +66,7 @@
                 <div class="social">
                         <h2>social</h2>
                         <ul>
+                            <li><a href="n/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="#">You can add links in your config file</a></li>
                             <li><a href="#">Another social link</a></li>

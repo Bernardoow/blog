@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
         <meta charset="utf-8" />
-        <title>Meld exibindo código na lingua japonesa-chinesa durante o merge.</title>
+        <title>Select multiplas-escolhas.</title>
         <link rel="stylesheet" href="n/theme/css/main.css" />
         <link href="n/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Blog do Bernardoow Atom Feed" />
 
@@ -23,40 +23,41 @@
   <article>
     <header>
       <h1 class="entry-title">
-        <a href="n/meld-merge-encoding.html" rel="bookmark"
-           title="Permalink to Meld exibindo código na lingua japonesa-chinesa durante o merge.">Meld exibindo código na lingua japonesa-chinesa durante o merge.</a></h1>
+        <a href="n/drafts/select-multiplas-escolhas.html" rel="bookmark"
+           title="Permalink to Select multiplas-escolhas.">Select multiplas-escolhas.</a></h1>
     </header>
 
     <div class="entry-content">
 <footer class="post-info">
-        <abbr class="published" title="2017-12-24T18:00:00-02:00">
-                Published: Dom 24 dezembro 2017
+        <abbr class="published" title="2018-07-01T18:00:00-03:00">
+                Published: Dom 01 julho 2018
         </abbr>
 
         <address class="vcard author">
                 By                         <a class="url fn" href="n/author/bernardo-gomes.html">Bernardo Gomes</a>
         </address>
 <p>In <a href="n/category/outros.html">Outros</a>.</p>
-<p>tags: <a href="n/tag/mercurial.html">Mercurial</a> <a href="n/tag/linux.html">Linux</a> <a href="n/tag/scm.html">SCM</a> <a href="n/tag/merge.html">Merge</a> </p>
-</footer><!-- /.post-info -->      <p>A minha equipe estava trabalhando em um projeto antigo e precisei fazer um merge. Uma situação relativamente simples de ser resolvida. Durante o merge foi aberto o programa Meld[1] e a comparação do texto não foi o que eu esperava pois o código comparado estava em uma lingua parecida com o japonês/chinês.</p>
-<p><img alt="alt &quot;meld exibindo comparações com outra lingua.&quot;" src="n/images/merge-unicode.png"></p>
-<p>Pesquisei a solução e descobri que o problema estava na codificação do software para merge. No projeto que estava trabalhando, a codificação era latin-1 e por padrão a codificação do Meld era utf-8.</p>
-<p>A solução utilizada foi primeiro checar o encoding suportado através do comando</p>
-<div class="highlight"><pre><span></span>$ gsettings get org.gnome.meld detect-encodings
-<span class="o">[</span><span class="s1">&#39;utf8&#39;</span><span class="o">]</span>
+<p>tags: <a href="n/tag/elm.html">ELM</a> </p>
+</footer><!-- /.post-info -->      <p>Eu estava criando uma tela utilizando Elm-Lang e me deparei com problema de pegar as multiplos itens selecionados em um input select.</p>
+<p>No elm pegar o input único do select é realativamente fácil, utilizando o seguinte código.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">Html.Events</span> <span class="nn">exposing</span> <span class="p">(</span><span class="n">targetValue</span><span class="p">,</span> <span class="n">on</span><span class="p">)</span>
+
+<span class="n">onChangeDefault</span> <span class="p">:</span> <span class="p">(</span><span class="n">String</span> <span class="o">-&gt;</span> <span class="n">msg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Html</span><span class="o">.</span><span class="n">Attribute</span> <span class="n">msg</span>
+<span class="n">onChangeDefault</span> <span class="n">tagger</span> <span class="o">=</span>
+    <span class="n">on</span> <span class="s2">&quot;change&quot;</span> <span class="p">(</span><span class="n">Json</span><span class="o">.</span><span class="n">Decode</span><span class="o">.</span><span class="n">map</span> <span class="n">tagger</span> <span class="n">targetValue</span><span class="p">)</span>
+
+
+<span class="n">select</span> <span class="p">[</span> <span class="n">onChangeDefault</span> <span class="n">SelectSelected</span><span class="p">,</span> <span class="n">multiple</span> <span class="bp">True</span> <span class="p">]</span>
+        <span class="p">[</span> <span class="n">option</span> <span class="p">[</span> <span class="n">value</span> <span class="s2">&quot;1&quot;</span> <span class="p">]</span>
+            <span class="p">[</span> <span class="n">text</span> <span class="s2">&quot;Um&quot;</span> <span class="p">]</span>
+        <span class="p">,</span> <span class="n">option</span>
+            <span class="p">[</span> <span class="n">value</span> <span class="s2">&quot;2&quot;</span> <span class="p">]</span>
+            <span class="p">[</span> <span class="n">text</span> <span class="s2">&quot;Dois&quot;</span> <span class="p">]</span>
+        <span class="p">]</span>
+
+<span class="nb">type</span> <span class="n">Msg</span>
+    <span class="o">=</span> <span class="n">SelectSelected</span> <span class="n">String</span>
 </pre></div>
-
-
-<p>Assim confirmei que estava somente aceitando utf-8. Para suportar o latin-1 executei o seguinte comando:</p>
-<div class="highlight"><pre><span></span>gsettings set org.gnome.meld detect-encodings &quot;[&#39;utf8&#39;,&#39;latin1&#39;]&quot;
-</pre></div>
-
-
-<p>Com isso, conseguir realizar o merge.</p>
-<p>O caso apresentado é voltado para latin1. Se seu projeto for de outro encoding faça o mesmo processo alterando o latin1 para o encoding que utilizar.</p>
-<p>Fontes:</p>
-<p><a href="https://askubuntu.com/questions/839755/meld-shows-output-in-unreadable-alphabet-japanese-chinese">askubuntu.com</a></p>
-<p>[1] <a href="http://meldmerge.org/">Meld</a></p>
     </div><!-- /.entry-content -->
 
   </article>
