@@ -29,8 +29,8 @@
 
     <div class="entry-content">
 <footer class="post-info">
-        <abbr class="published" title="2018-07-01T18:00:00-03:00">
-                Published: Dom 01 julho 2018
+        <abbr class="published" title="2018-07-29T18:00:00-03:00">
+                Published: Dom 29 julho 2018
         </abbr>
 
         <address class="vcard author">
@@ -38,9 +38,9 @@
         </address>
 <p>In <a href="/blog/category/elm-lang.html">ELM-Lang</a>.</p>
 <p>tags: <a href="/blog/tag/elm.html">ELM</a> </p>
-</footer><!-- /.post-info -->      <p>Durante um desenvolvimento me deparei com necessidade transformar uma data que esta em forma de uma lista: ["2018", "05", "10", "10", "20", "15"] em uma string formatada.</p>
+</footer><!-- /.post-info -->      <p>Durante um desenvolvimento, me deparei com necessidade de transformar uma data que estava em forma de uma lista: ["2018", "05", "10", "10", "20", "15"] em uma string formatada "2018/05/10".</p>
 <p>Meu primeiro pensamento foi fazer uma indexedMap e depois criar uma função com vários ifs para utilizar dentro de um fold para obter a data.
-Depois algum tempo de análise, encontrei uma alternativa com patter matching. Eu estava observando a documentação da função head da lista
+Depois algum tempo de análise, encontrei uma alternativa com pattern matching. Eu estava observando a documentação da função head da lista
 que fuciona assim:</p>
 <div class="highlight"><pre><span></span><span class="nv">head</span> <span class="nf">:</span> <span class="kt">List</span> <span class="nv">a</span> <span class="nf">-&gt;</span> <span class="kt">Maybe</span> <span class="nv">a</span>
 <span class="nv">head</span> <span class="nv">list</span> <span class="nf">=</span>
@@ -65,27 +65,18 @@ que fuciona assim:</p>
 </pre></div>
 
 
-<p>Com essa implementaçao, consegui resolver meu problema.</p>
+<p>Com essa implementaçao eu consegui resolver meu problema.</p>
     </div><!-- /.entry-content -->
 
   </article>
 </section>
         <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>links</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                            <li><a href="#">You can modify those links in your config file</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
                 <div class="social">
                         <h2>social</h2>
                         <ul>
 
-                            <li><a href="#">You can add links in your config file</a></li>
-                            <li><a href="#">Another social link</a></li>
+                            <li><a href="https://github.com/Bernardoow">Github</a></li>
+                            <li><a href="https://www.linkedin.com/in/bernardo-gomes/">Linkedin</a></li>
                         </ul>
                 </div><!-- /.social -->
         </section><!-- /#extras -->
