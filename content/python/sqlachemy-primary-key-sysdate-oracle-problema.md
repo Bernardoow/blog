@@ -4,7 +4,6 @@ Category: Python
 Tags: SqlAlchemy, Sysdate, Oracle
 Slug: sqlachemy-primary-key-sysdate-oracle-problema
 Authors: Bernardo Gomes
-Status: draft
 
 Trabalhei em uma tarefa que possuía uma tabela legada que tinha como uma chave primária composta sendo um campo de string e o outro datetime.
 
