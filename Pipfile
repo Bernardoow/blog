@@ -6,7 +6,7 @@ name = "pypi"
 [dev-packages]
 
 [packages]
-pelican = "*"
+pelican = "===4.1.1"
 markdown = "*"
 ghp-import = "*"
 
