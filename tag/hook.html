@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+        <meta charset="utf-8" />
+        <title>Blog do Bernardoow - Hook</title>
+        <link rel="stylesheet" href="/blog/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+<a href="https://github.com/Bernardoow">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+</a>
+        <header id="banner" class="body">
+                <h1><a href="/blog/">Blog do Bernardoow </a></h1>
+                <nav><ul>
+                    <li><a href="/blog/category/elm-lang.html">ELM-Lang</a></li>
+                    <li><a href="/blog/category/mercurial-scm.html">Mercurial SCM</a></li>
+                    <li><a href="/blog/category/outros.html">Outros</a></li>
+                    <li><a href="/blog/category/python.html">Python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/blog/hooks-no-mercurial.html">Criando Hooks no Mercurial.</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2019-06-25T18:00:00-03:00">
+                Published: Tue 25 June 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/blog/author/bernardo-gomes.html">Bernardo Gomes</a>
+        </address>
+<p>In <a href="/blog/category/mercurial-scm.html">Mercurial SCM</a>.</p>
+<p>tags: <a href="/blog/tag/mercurial.html">Mercurial</a> <a href="/blog/tag/hg.html">hg</a> <a href="/blog/tag/scm.html">SCM</a> <a href="/blog/tag/hook.html">Hook</a> <a href="/blog/tag/hooks.html">Hooks</a> </p>
+</footer><!-- /.post-info --><p>Para criar hook no mercurial é simples. Basta você editar o arquivo .hg/hgrc, criar uma sessão [hooks] e adicionar o comando que deverá ser executado em um determinado momento.</p>
+<h2>Exemplo de verificação antes de comitar.</h2>
+<p>Nesse exemplo quero checar que não existe comando pdb no código no momento do commit.</p>
+<ol>
+<li>vim .hg/hgrc</li>
+<li>adicionar a sessão [hooks]</li>
+<li>adicionar o código pretxncommit.checkpdb = hg export tip | (! grep -q 'pdb.set_trace()') </li>
+</ol>
+<p><img alt="alt &quot;Exemplo de um hook&quot;" src="/blog/images/mercurial_hook.png"></p>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://github.com/Bernardoow">Github</a></li>
+                            <li><a href="https://www.linkedin.com/in/bernardo-gomes/">Linkedin</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

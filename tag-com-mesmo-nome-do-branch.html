@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+        <meta charset="utf-8" />
+        <title>Tag com mesmo nome do branch.</title>
+        <link rel="stylesheet" href="/blog/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+<a href="https://github.com/Bernardoow">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+</a>
+        <header id="banner" class="body">
+                <h1><a href="/blog/">Blog do Bernardoow </a></h1>
+                <nav><ul>
+                    <li><a href="/blog/category/elm-lang.html">ELM-Lang</a></li>
+                    <li class="active"><a href="/blog/category/mercurial-scm.html">Mercurial SCM</a></li>
+                    <li><a href="/blog/category/outros.html">Outros</a></li>
+                    <li><a href="/blog/category/python.html">Python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/blog/tag-com-mesmo-nome-do-branch.html" rel="bookmark"
+           title="Permalink to Tag com mesmo nome do branch.">Tag com mesmo nome do branch.</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-06-25T18:00:00-03:00">
+                Published: Tue 25 June 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/blog/author/bernardo-gomes.html">Bernardo Gomes</a>
+        </address>
+<p>In <a href="/blog/category/mercurial-scm.html">Mercurial SCM</a>.</p>
+<p>tags: <a href="/blog/tag/mercurial.html">Mercurial</a> <a href="/blog/tag/hg.html">hg</a> <a href="/blog/tag/scm.html">SCM</a> </p>
+</footer><!-- /.post-info -->      <p>Ao final de uma tarefa, eu realizei o merge entre branch e logo após criei uma tag para marcar o ponto que seria a publicação daquela dia. E essa seria a primeira vez que eu criaria uma tag por que não era eu que fazia o deploy mas naquele dia seria eu.</p>
+<p>Ao mudar de branch, digitei um comando errado ao inves de mudar de branch criei uma tag com o nome de um mesmo branch que existia e não percebi. Realizei o deploy, prosegui com outras tarefas até chegar no dia de realizar outro deploy. E aconteceu um problema no processo de merges de branch.</p>
+<p>O processo de deploy, nessa empresa, consiste de fazer o merge do branch default no branch da nova funcionadade, resolver os conflitos, fechar o branch e fazer outro merge do branch com nova tarefa com o default.</p>
+<p>O meu problema aconteceu na parte que realizava o merge do default no branch da nova funcionalidade e falava que não podia fazer merge no ancestral. Depois de algum tempo buscando uma solução, descobri que o problema era a tag que o merge não sabia se fazia com o branch ou com a tag.</p>
+<p>A minha solução foi deletar a tag manualmente do arquivo e o controle de versão voltou a funcionar. Essa solução foi encontra pelo meu colega de trabalho R. que conseguiu visualizar esse cenário e me ajudou a consertar esse problema.</p>
+<p>Fluxos do Problema: </p>
+<ol>
+<li>mkdir hgblog</li>
+<li>cd hgblog/</li>
+<li>hg init
+hg branch default</li>
+<li>touch readme.md</li>
+<li>hg add readme.md </li>
+<li>
+<p>hg commit -m "first commit"</p>
+</li>
+<li>
+<p>hg branches
+default                        0:ef1f948f2eef</p>
+</li>
+<li>hg branch
+default</li>
+<li>hg tags
+tip                                0:ef1f948f2eef</li>
+<li>hg branch feature-one</li>
+<li>touch file01_example.txt</li>
+<li>hg add file01_example.txt</li>
+<li>hg commit -m "Added file01_example.txt"
+hg update default
+hg branch feature-two</li>
+<li>touch file02_example.txt</li>
+<li>hg add file02_example.txt</li>
+<li>
+<p>hg commit -m "Added file02_example.txt"</p>
+</li>
+<li>
+<p>hg tag default </p>
+</li>
+<li>hg up default </li>
+</ol>
+<p>hg merge default
+abort: merging with a working directory ancestor has no effect</p>
+<p>.. hg sum</p>
+<p>parent: 2:bfb2f9ae4579 default
+ Added file02_example.txt
+branch: feature-two
+commit: (clean)
+update: 1 new changesets (update)
+phases: 4 draft</p>
+<p>hg up default</p>
+<p>parent: 2:bfb2f9ae4579 default
+ Added file02_example.txt
+branch: feature-two
+commit: (clean)
+update: 1 new changesets (update)
+phases: 4 draft</p>
+<p>hg up feature-two </p>
+<h1>vim .hg/cache/tags2-visible</h1>
+<h1>delete tag</h1>
+<h1>touch filedefault.txt</h1>
+<h1>hg add filedefault.txt</h1>
+<h1>hg commit -m "filedefault"</h1>
+<h1>warning: tag default conflicts with existing branch name</h1>
+<h1>touch file_in_default_branch.txt</h1>
+<h1>hg add file_in_default_branch.txt</h1>
+<h1>hg commit -m "added another file in default branch"</h1>
+<p>hg up feature-one</p>
+<p>hg merge default
+hg commit -m "feature-one &lt;- default" --close-branch</p>
+<p>hg up default</p>
+<p>abort: merging with a working directory ancestor has no effect</p>
+<p>hg tags
+tip                                3:0fdaec178a6e
+default                            1:c0f7e024d6f4</p>
+<p>hg tag --remove default
+warning: tag default conflicts with existing branch name
+vim .hgtags 
+remove line with default tag.
+hg commit -m "fix tags"</p>
+<p>hg merge default
+abort: merging with a working directory ancestor has no effect
+hg up default
+vim .hgtags 
+remove line with default tag.
+hg commit -m "fix tags"</p>
+<p>hg up feature-one</p>
+<p>1 files updated, 0 files merged, 0 files removed, 0 files unresolved
+(branch merge, don't forget to commit)
+hg commit -m "feature-one &lt;- default"
+hg up default
+hg merge feature-one 
+2 files updated, 0 files merged, 0 files removed, 0 files unresolved
+(branch merge, don't forget to commit)
+hg commit -m "default &lt;- feature-one"</p>
+<p>hg commit -m "Close branch" --close-branch</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://github.com/Bernardoow">Github</a></li>
+                            <li><a href="https://www.linkedin.com/in/bernardo-gomes/">Linkedin</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
